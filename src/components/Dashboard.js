@@ -5,10 +5,12 @@ import BottomNavigationBar from './Layout/BottomNavigation';
 import GameCard from './GameCard';
 import TopTabs from './Toptab';
 import dd from "../assets/dd.png";
+import { useNavigate } from 'react-router-dom';
 
 
 const Dashboard = () => {
-  const [selectedTab, setSelectedTab] = useState(0); // 0: Games, 1: Social
+  const [selectedTab, setSelectedTab] = useState(0); 
+  const navigate = useNavigate()
 
   return (
     <Box sx={{ pb: 8 }}> {/* Padding for bottom nav */}
@@ -17,8 +19,8 @@ const Dashboard = () => {
 
         {selectedTab === 0 && (
           <>
-            <Box mb={2}>
-              <GameCard
+            <Box mb={2}  onClick={()=>navigate('/welcome')}>
+              <GameCard 
                 title=" GameDev Heroes"
                 image={dd}
               />

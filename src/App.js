@@ -5,12 +5,14 @@ import { routes } from './routes/Routes';
 import Signup from './authentiaction/Signup';
 import { useState } from 'react';
 import SplashScreen from './SplashScreen';
+import Welcome from './components/game/Welcome';
+import GameScreen from './components/game/Game';
 
 
 function App() {
   const admin = localStorage.getItem("token");
     const [showSplash, setShowSplash] = useState(true);
-
+   
   const handleSplashComplete = () => {
     setShowSplash(false);
   };
