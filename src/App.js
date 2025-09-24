@@ -24,13 +24,15 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         
-        {admin ? (
+        {
+        // admin ? (
           routes.map((route, i) => (
             <Route key={i} path={route.path} element={route.element} />
           ))
-        ) : (
-          <Route path="*" element={<Login />} />
-        )}
+        // ) : (
+        //   <Route path="*" element={<Login />} />
+        // )
+        }
 
        
       </Routes>

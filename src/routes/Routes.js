@@ -1,13 +1,11 @@
-import Dashboard from "../components/Layout/Dashboard";
-import MainLayout from "../components/Layout/MainLayout";
+import Dashboard from "../components/Dashboard";
+
 
 export const routes = [
   {
     path: "/dashboard",
     element: (
-      <MainLayout>
-        <Dashboard />{" "}
-      </MainLayout>
+        <Dashboard />
     ),
   },
 ]
