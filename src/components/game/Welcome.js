@@ -53,10 +53,11 @@ const Welcome = ({ onComplete }) => {
                 {/* Centered Progress Line (slightly above bottom) */}
                 <Box
                     sx={{
+                        mt:10,
                         position: 'absolute',
-                        bottom: '100px', // You can adjust this value to move it higher or lower
+                        bottom: '100px', 
                         height: '6px',
-                        width: '60%', // progress bar width
+                        width: '60%',
                         backgroundColor: 'transparent',
                         borderRadius: '4px',
                         overflow: 'hidden',
