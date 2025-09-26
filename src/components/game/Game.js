@@ -12,19 +12,19 @@ const GameScreen = () => {
         const options = {
             series: [100, 100, 100, 100],
             chart: {
-                height: 350,
+                height: 300,
                 type: 'radialBar',
                 animations: {
                     enabled: true,
                     easing: 'linear',
-                    speed: 20000, // 20sec  chart fill animation
+                    speed: 20000, // 20 seconds animation
                 }
             },
             plotOptions: {
                 radialBar: {
                     dataLabels: {
-                        name: { fontSize: '22px' },
-                        value: { fontSize: '16px' },
+                        name: { fontSize: '18px' },
+                        value: { fontSize: '14px' },
                         total: {
                             show: true,
                             label: 'Total',
@@ -55,15 +55,14 @@ const GameScreen = () => {
         };
     }, []);
 
-    // Create coin elements falling from sides to center bottom with staggered delay
     const dropCoins = () => {
         const coins = [];
-        const coinCount = Math.floor(Math.random() * 10) + 25; // 6 to 15 coins
+        const coinCount = Math.floor(Math.random() * 10) + 25;
 
         for (let i = 0; i < coinCount; i++) {
-            const leftPos = 35 + Math.random() * 20; // 20%-50%
-            const delay = (i * 0.3).toFixed(1); // staggered delay
-            const duration = (4 + Math.random() * 2).toFixed(1); // 4s to 6s
+            const leftPos = 35 + Math.random() * 30; // 35% - 65%
+            const delay = (i * 0.3).toFixed(1);
+            const duration = (4 + Math.random() * 2).toFixed(1);
 
             coins.push(
                 <img
@@ -87,85 +86,85 @@ const GameScreen = () => {
     };
 
     return (
-        <div
-            style={{
-                height: '100vh',
-                width: '100vw',
-                backgroundImage: `url(${background})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                overflow: 'hidden',
-                position: 'relative',
-            }}
-        >
-            {/* Chart */}
-            <div
-                id="chart"
-                style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex: 2,
-                }}
-            ></div>
+        <div className="game-container">
+            {/* Chart Container */}
+            <div id="chart" className="chart-center" />
 
             {/* Falling Coins */}
             {showCoins && (
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        zIndex: 5,
-                        width: '100%',
-                        height: '100%',
-                    }}
-                >
+                <div className="coin-container">
                     {coinBatch}
                 </div>
             )}
 
-
-            {/* CSS animations */}
+            {/* Styles */}
             <style>{`
-  .falling-coin {
-    position: absolute;
-    top: -50px;
-    opacity: 1;
-    animation-name: fall;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-    pointer-events: none;
-  }
+                .game-container {
+                    height: 100vh;
+                    width: 100vw;
+                    background-image: url(${background});
+                    background-size: cover;
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    overflow: hidden;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
 
-  @keyframes fall {
-    0% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(85vh) rotate(720deg);
-      opacity: 1;
-    }
-  }
+                .chart-center {
+                    z-index: 2;
+                    width: 300px;
+                    height: 300px;
+                    margin-top:120px
+                }
 
-  .minting-effect {
-    animation: mintPulse 0.6s ease-in-out infinite alternate;
-  }
+                .coin-container {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 5;
+                    pointer-events: none;
+                }
 
-  @keyframes mintPulse {
-    0% {
-      transform: scale(1);
-      filter: brightness(1);
-    }
-    100% {
-      transform: scale(1.1);
-      filter: brightness(1.4);
-    }
-  }
-`}</style>
+                .falling-coin {
+                    position: absolute;
+                    top: -50px;
+                    opacity: 1;
+                    animation-name: fall;
+                    animation-timing-function: ease-in-out;
+                    animation-fill-mode: forwards;
+                }
 
+                @keyframes fall {
+                    0% {
+                        transform: translateY(0) rotate(0deg);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(90vh) rotate(720deg);
+                        opacity: 1;
+                    }
+                }
+
+                .minting-effect {
+                    animation: mintPulse 0.6s ease-in-out infinite alternate;
+                }
+
+                @keyframes mintPulse {
+                    0% {
+                        transform: scale(1);
+                        filter: brightness(1);
+                    }
+                    100% {
+                        transform: scale(1.1);
+                        filter: brightness(1.4);
+                    }
+                }
+            `}</style>
         </div>
     );
 };
