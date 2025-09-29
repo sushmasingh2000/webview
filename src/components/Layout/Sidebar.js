@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { FaFirstOrder } from "react-icons/fa";
 
-// Role-specific access list
+
 const superAdminAccess = [
   "Dashboard",
   "Store Management",
@@ -42,7 +42,6 @@ const superAdminAccess = [
   "LogOut",
 ];
 
-// Full menu list
 const fullMenuItems = [
   {
     id: "dashboard",
@@ -254,7 +253,7 @@ const Sidebar = ({ sidebarOpen = true }) => {
   const [openSubMenu, setOpenSubMenu] = useState({});
   const userRole = localStorage.getItem("role");
   const alwaysVisible = ["Dashboard", "LogOut"];
-  // Filter menu based on user role
+
   const menuItems = fullMenuItems.filter((item) => {
     const isAlwaysVisible = alwaysVisible.includes(item.label);
     const isSuperAdminItem = superAdminAccess.includes(item.label);
@@ -267,7 +266,7 @@ const Sidebar = ({ sidebarOpen = true }) => {
       return isSuperAdminItem;
     }
 
-    return !isSuperAdminItem; // Hide superadmin-only items for others
+    return !isSuperAdminItem;
   });
   const toggleSubMenu = (id) => {
     setOpenSubMenu((prev) => ({
