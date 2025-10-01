@@ -1,172 +1,174 @@
-import { useEffect, useState, useRef } from 'react';
-import ApexCharts from 'apexcharts';
+import { useEffect, useState, useRef } from "react";
+import ApexCharts from "apexcharts";
 import background from "../../assets/wait.png";
-import coin from "../../assets/coin.png";
+import character from "../../assets/avr.png";
+import coinImg from "../../assets/coin.png";
+import bucketImg from "../../assets/b.png"; 
 
 const GameScreen = () => {
-    const [showCoins, setShowCoins] = useState(false);
-    const [coinBatch, setCoinBatch] = useState([]);
-    const timers = useRef([]);
+  const [coins, setCoins] = useState([]);
+  const timers = useRef([]);
 
-    useEffect(() => {
-        const options = {
-            series: [100, 100, 100, 100],
-            chart: {
-                height: 300,
-                type: 'radialBar',
-                animations: {
-                    enabled: true,
-                    easing: 'linear',
-                    speed: 20000, // 20 seconds animation
-                }
+  useEffect(() => {
+    const options = {
+      series: [100, 100, 100, 100],
+      chart: {
+        height: 300,
+        type: "radialBar",
+        animations: {
+          enabled: true,
+          easing: "linear",
+          speed: 20000,
+        },
+      },
+      plotOptions: {
+        radialBar: {
+          dataLabels: {
+            name: { fontSize: "18px" },
+            value: { fontSize: "14px" },
+            total: {
+              show: true,
+              label: "Total",
+              formatter: function (w) {
+                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+              },
             },
-            plotOptions: {
-                radialBar: {
-                    dataLabels: {
-                        name: { fontSize: '18px' },
-                        value: { fontSize: '14px' },
-                        total: {
-                            show: true,
-                            label: 'Total',
-                            formatter: function (w) {
-                                return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                            }
-                        }
-                    }
-                }
-            },
-            labels: ['BTC', 'ETH', 'DOGE', 'SOL'],
-        };
-
-        const chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-        startCycle();
-
-        function startCycle() {
-            timers.current.push(setTimeout(() => {
-                dropCoins();
-            }, 30000));
-        }
-
-        return () => {
-            chart.destroy();
-            timers.current.forEach(clearTimeout);
-            timers.current = [];
-        };
-    }, []);
-
-    const dropCoins = () => {
-        const coins = [];
-        const coinCount = Math.floor(Math.random() * 10) + 25;
-
-        for (let i = 0; i < coinCount; i++) {
-            const leftPos = 35 + Math.random() * 30; // 35% - 65%
-            const delay = (i * 0.3).toFixed(1);
-            const duration = (4 + Math.random() * 2).toFixed(1);
-
-            coins.push(
-                <img
-                    key={Date.now() + i}
-                    src={coin}
-                    alt="coin"
-                    className="falling-coin"
-                    style={{
-                        left: `${leftPos}%`,
-                        animationDelay: `${delay}s`,
-                        animationDuration: `${duration}s`,
-                        width: '35px',
-                        height: '35px',
-                    }}
-                />
-            );
-        }
-
-        setShowCoins(true);
-        setCoinBatch(coins);
+          },
+        },
+      },
+      labels: ["BTC", "ETH", "DOGE", "SOL"],
     };
 
-    return (
-        <div className="game-container">
-            {/* Chart Container */}
-            <div id="chart" className="chart-center" />
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+    startCycle();
 
-            {/* Falling Coins */}
-            {showCoins && (
-                <div className="coin-container">
-                    {coinBatch}
-                </div>
-            )}
+    function startCycle() {
+      timers.current.push(
+        setTimeout(() => {
+          dropCoins();
+        }, 30000) // 5s test ke liye rakha, aap 30000 (30s) kar sakte ho
+      );
+    }
 
-            {/* Styles */}
-            <style>{`
-                .game-container {
-                    height: 100vh;
-                    width: 100vw;
-                    background-image: url(${background});
-                    background-size: cover;
-                    background-position: center center;
-                    background-repeat: no-repeat;
-                    overflow: hidden;
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
+    return () => {
+      chart.destroy();
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
+    };
+  }, []);
 
-                .chart-center {
-                    z-index: 2;
-                    width: 300px;
-                    height: 300px;
-                    margin-top:120px
-                }
+  const dropCoins = () => {
+    const newCoins = [];
+    const coinCount = Math.floor(Math.random() * 5) + 5; // 5-10 coins
+    for (let i = 0; i < coinCount; i++) {
+      const id = Date.now() + i;
+      const leftPos = 35 + Math.random() * 30; // random X position
+      const delay = i * 0.3; // staggered drop
 
-                .coin-container {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: 5;
-                    pointer-events: none;
-                }
+      newCoins.push({ id, status: "falling", left: leftPos, delay });
+      // 3s fall + 2s wait = 5s me bucket move
+      setTimeout(() => {
+        setCoins((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, status: "collecting" } : c))
+        );
+      }, 5000 + delay * 1000);
+    }
+    setCoins((prev) => [...prev, ...newCoins]);
+  };
 
-                .falling-coin {
-                    position: absolute;
-                    top: -50px;
-                    opacity: 1;
-                    animation-name: fall;
-                    animation-timing-function: ease-in-out;
-                    animation-fill-mode: forwards;
-                }
+  return (
+    <div className="game-container h-[92vh]">
+      <img
+        src={character}
+        alt="character"
+        className="character-image w-[320px] -mb-5" />
+      <div id="chart" className="chart-center" />
+      {coins.map((coin) => (
+        <img
+          key={coin.id}
+          src={coinImg}
+          alt="coin"
+          className={`absolute w-[35px] h-[35px] ${
+            coin.status === "falling"
+              ? "falling-coin"
+              : coin.status === "collecting"
+              ? "to-bucket"
+              : ""
+          }`}
+          style={{
+            left: `${coin.left}%`,
+            animationDelay: `${coin.delay}s`,
+          }}
+        />
+      ))}
 
-                @keyframes fall {
-                    0% {
-                        transform: translateY(0) rotate(0deg);
-                        opacity: 1;
-                    }
-                    100% {
-                        transform: translateY(90vh) rotate(720deg);
-                        opacity: 1;
-                    }
-                }
+      {/* Bucket fixed at right bottom */}
+      <img
+        src={bucketImg}
+        alt="bucket"
+        className="bucket absolute w-[120px] h-[120px] -bottom-0.5 -right-4 z-10"
+      />
 
-                .minting-effect {
-                    animation: mintPulse 0.6s ease-in-out infinite alternate;
-                }
+      <style>{`
+        .game-container {
+          width: 100vw;
+          background-image: url(${background});
+          background-size: cover;
+          background-position: center center;
+          background-repeat: no-repeat;
+          overflow: hidden;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          box-sizing: border-box;
+        }
 
-                @keyframes mintPulse {
-                    0% {
-                        transform: scale(1);
-                        filter: brightness(1);
-                    }
-                    100% {
-                        transform: scale(1.1);
-                        filter: brightness(1.4);
-                    }
-                }
-            `}</style>
-        </div>
-    );
+        .chart-center {
+          z-index: 2;
+          width: 300px;
+          height: 300px;
+        }
+
+        .falling-coin {
+          top: -50px;
+          position: absolute;
+          animation: fall 3s ease-in forwards;
+        }
+
+        @keyframes fall {
+          0% {
+            top: -50px;
+            transform: rotate(0deg);
+          }
+          100% {
+            top: 75vh;
+            transform: rotate(720deg);
+          }
+        }
+
+        .to-bucket {
+          top: 77vh;
+          position: absolute;
+          animation: moveToBucket 1.5s ease-in forwards;
+        }
+
+        @keyframes moveToBucket {
+          0% {
+            top: 75vh;
+            transform: scale(1);
+          }
+          100% {
+            top: 85vh;
+            left: 85%;
+            transform: scale(0.5);
+          }
+        }
+      `}</style>
+    </div>
+  );
 };
 
 export default GameScreen;

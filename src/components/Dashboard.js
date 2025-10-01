@@ -13,7 +13,7 @@ const Dashboard = () => {
   const navigate = useNavigate()
 
   return (
-    <Box sx={{ pb: 8 }}> {/* Padding for bottom nav */}
+    <Box sx={{ pb: 8 }}> 
       <Container>
         <TopTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
