@@ -11,11 +11,11 @@ import { endpoint } from "../utils/APIRoutes";
 import { saveToken, saveUid, saveUserCP, saveUsername } from "../redux/slices/counterSlice";
 const Login = () => {
   const params = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
-  const datatele = window?.Telegram?.WebApp?.initDataUnsafe?.user;
+  // const datatele = window?.Telegram?.WebApp?.initDataUnsafe?.user;
 
-  // const datatele = {
-  //   id: "1840589027",
-  // };
+  const datatele = {
+    id: "9876543210",
+  };
 
   const navigate = useNavigate();
   const [openDialogBox, setOpenDialogBox] = useState(false);
@@ -25,25 +25,25 @@ const Login = () => {
 
   const loginFn = async (reqBody) => {
     setLoading(true);
-    const reqBodyy = {
-      mobile: String(datatele?.id),
-      email: String(datatele?.id),
-      full_name: String(datatele?.username || "N/A"),
-      referral_id: String(params),
-      username: String(reqBody.id),
-      password: String(reqBody.id),
-    };
     // const reqBodyy = {
-    //   mobile: String("1840589027"),
-    //   email: String("1840589027"),
-    //   full_name: String(datatele?.username),
-    //   referral_id: String("1234567890"),
-    //   username: String("1840589027"),
-    //   password: String("1840589027"),
+    //   mobile: String(datatele?.id),
+    //   email: String(datatele?.id),
+    //   full_name: String(datatele?.username || "N/A"),
+    //   referral_id: String(params),
+    //   username: String(reqBody.id),
+    //   password: String(reqBody.id),
     // };
+    const reqBodyy = {
+      mobile: String("9876543210"),
+      email: String("9876543210"),
+      full_name: String("t"),
+      referral_id: String("9876543210"),
+      username: String("9876543210"),
+      password: String("9876543210"),
+    };
 
     try {
-      const response = await axios.post(endpoint?.login_api, reqBodyy, {
+      const response = await axios.post(endpoint?.user_login, reqBodyy, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",

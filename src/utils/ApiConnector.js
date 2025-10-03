@@ -1,37 +1,31 @@
 import axios from "axios";
-import toast from "react-hot-toast";
-// import { frontend, telegram_url } from "./APIRoutes";
-// import { fron_end_main_domain } from "./urls";
-// import toast from "react-hot-toast";
 
 export const apiConnectorGet = async (endpoint, params) => {
   try {
-    const response = await axios.get(endpoint, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+    const response = await axios?.get(
+      endpoint,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("logindataen")}`,
+        },
       },
-      params: params, // ✅ Correct place for params
-    });
-    if (response?.data?.msg === "Invalid Token.") {
-      toast("Login in another device ", { id: 1 });
-      localStorage.clear();
-      // window.location.href = `${telegram_url}`;
-      return;
-    }
+      {
+        params: params,
+      }
+    );
+    // if (response?.data?.msg === "Invalid Token.") {
+    //   toast("Login in another device ", { id: 1 });
+    //   localStorage.clear();
+    //   window.location.href = `${telegram_url}`;
+    //   return;
+    // }
     return response;
-  } catch (error) {
-    console.error("GET request failed:", error);
-    throw error;
+  } catch (e) {
+    return {
+      msg: e?.message,
+    };
   }
 };
-
-// if (response?.data?.msg === "Invalid Token.") {
-//   toast("Login in another device ", { id: 1 });
-//   localStorage.clear();
-//   window.location.href = `${telegram_url}`;
-//   return;
-// }
-
 export const apiConnectorGetHome = async (endpoint, params, token) => {
   try {
     const response = await axios?.get(
@@ -45,12 +39,12 @@ export const apiConnectorGetHome = async (endpoint, params, token) => {
         params: params,
       }
     );
-    if (response?.data?.msg === "Invalid Token.") {
-      toast("Login in another device ", { id: 1 });
-      // localStorage.clear();
-      // window.location.href = `${telegram_url}`;
-      return;
-    }
+    // if (response?.data?.msg === "Invalid Token.") {
+    //   toast("Login in another device ", { id: 1 });
+    //   // localStorage.clear();
+    //   // window.location.href = `${telegram_url}`;
+    //   return;
+    // }
     return response;
   } catch (e) {
     return {
@@ -88,7 +82,7 @@ export const apiConnectorPost = async (endpoint, reqBody) => {
   try {
     const response = await axios?.post(endpoint, reqBody, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("logindataen")}`,
       },
     });
     // if (response?.data?.msg === "Invalid logindataen.") {
@@ -128,10 +122,21 @@ export const apiConnectorPostWithdouToken = async (
     };
   }
 };
+export const getTimeLeft = (targetDateTime) => {
+  const now = new Date();
+  const target = new Date(targetDateTime);
+  const diff = target - now; // milliseconds
 
-export const usequeryBoolean = {
-  refetchOnWindowFocus: false,
-  refetchOnMount: false,
-  refetchOnReconnect: false,
-  retry: false
-}
+  if (diff <= 0) return "00:00:00";
+
+  const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, "0");
+  const minutes = String(
+    Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  ).padStart(2, "0");
+  const seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(
+    2,
+    "0"
+  );
+
+  return `${hours}:${minutes}:${seconds}`;
+};

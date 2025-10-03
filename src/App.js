@@ -7,6 +7,7 @@ import { useState } from 'react';
 import SplashScreen from './SplashScreen';
 import Welcome from './components/game/Welcome';
 import GameScreen from './components/game/Game';
+import ActivationWithFSTAndPull from './components/Paying/ActivationWithFSTAndPull';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/activation-link" element={<ActivationWithFSTAndPull />} />
         
         {
         // admin ? (
